@@ -1,30 +1,47 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:parcial_pucetec/main.dart';
+import 'package:parcial_pucetec/helper.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  group('Cedula Ecuatoriana Validator', () {
+    
+    test('Valid Ecuadorian ID returns true', () {
+      const cedulaValida = '1722417332';
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+      final result = Validators.cedulaEcuatoriana(cedulaValida);
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+      expect(result, true);
+    });
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    test('Invalid length returns false', () {
+      const cedulaCorta = '123456789';
+
+      final result = Validators.cedulaEcuatoriana(cedulaCorta);
+
+      expect(result, false);
+    });
+
+    test('Invalid province code returns false', () {
+      const cedulaProvinciaInvalida = '2598765432';
+
+      final result = Validators.cedulaEcuatoriana(cedulaProvinciaInvalida);
+
+      expect(result, false);
+    });
+
+    test('Invalid third digit returns false', () {
+      const cedulaTercerDigitoInvalido = '0168765432';
+
+      final result = Validators.cedulaEcuatoriana(cedulaTercerDigitoInvalido);
+
+      expect(result, false);
+    });
+
+    test('Invalid verification digit returns false', () {
+      const cedulaChecksumInvalido = '0102030406';
+
+      final result = Validators.cedulaEcuatoriana(cedulaChecksumInvalido);
+
+      expect(result, false);
+    });
   });
 }
