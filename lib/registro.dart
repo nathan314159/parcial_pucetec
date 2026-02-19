@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:parcial_pucetec/helper.dart'; // Tu helper de validaciones
+import 'dasboard.dart'; // Importamos la vista del dashboard
 
 void main() {
   runApp(const RegistroPage());
@@ -46,10 +47,18 @@ class _MyFormPageState extends State<MyFormPage> {
 
   void _submitForm() {
     if (_formKey.currentState!.validate()) {
+      // Mostrar SnackBar
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Registro exitoso ✅')),
       );
-      // Aquí podrías agregar lógica para guardar los datos
+
+      // Navegar al Dashboard después de validar
+      Future.delayed(const Duration(milliseconds: 500), () {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const DashboardPage()),
+        );
+      });
     }
   }
 
@@ -71,12 +80,8 @@ class _MyFormPageState extends State<MyFormPage> {
                   labelText: 'Cédula ecuatoriana',
                 ),
                 validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Campo requerido';
-                  }
-                  if (!Validators.cedulaEcuatoriana(value)) {
-                    return 'Cédula inválida';
-                  }
+                  if (value == null || value.isEmpty) return 'Campo requerido';
+                  if (!Validators.cedulaEcuatoriana(value)) return 'Cédula inválida';
                   return null;
                 },
               ),
@@ -89,9 +94,7 @@ class _MyFormPageState extends State<MyFormPage> {
                   labelText: 'Nombre completo',
                 ),
                 validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Campo requerido';
-                  }
+                  if (value == null || value.isEmpty) return 'Campo requerido';
                   return null;
                 },
               ),
@@ -105,12 +108,8 @@ class _MyFormPageState extends State<MyFormPage> {
                   labelText: 'Correo electrónico',
                 ),
                 validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Campo requerido';
-                  }
-                  if (!Validators.email(value)) {
-                    return 'Correo inválido';
-                  }
+                  if (value == null || value.isEmpty) return 'Campo requerido';
+                  if (!Validators.email(value)) return 'Correo inválido';
                   return null;
                 },
               ),
@@ -124,12 +123,8 @@ class _MyFormPageState extends State<MyFormPage> {
                   labelText: 'Contraseña',
                 ),
                 validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Campo requerido';
-                  }
-                  if (!Validators.password(value)) {
-                    return 'La contraseña debe tener al menos 6 caracteres';
-                  }
+                  if (value == null || value.isEmpty) return 'Campo requerido';
+                  if (!Validators.password(value)) return 'La contraseña debe tener al menos 6 caracteres';
                   return null;
                 },
               ),
@@ -143,21 +138,20 @@ class _MyFormPageState extends State<MyFormPage> {
                   labelText: 'Repetir contraseña',
                 ),
                 validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Campo requerido';
-                  }
-                  if (value != _passwordController.text) {
-                    return 'Las contraseñas no coinciden';
-                  }
+                  if (value == null || value.isEmpty) return 'Campo requerido';
+                  if (value != _passwordController.text) return 'Las contraseñas no coinciden';
                   return null;
                 },
               ),
               const SizedBox(height: 32),
 
               // Botón registrar
-              ElevatedButton(
-                onPressed: _submitForm,
-                child: const Text('Registrar'),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: _submitForm,
+                  child: const Text('Registrar'),
+                ),
               ),
             ],
           ),
