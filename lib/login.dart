@@ -74,6 +74,7 @@ class _LoginPageState extends State<LoginPage> {
                   const SizedBox(height: 16),
 
                   // Contraseña
+                  // Contraseña
                   TextFormField(
                     controller: _passwordController,
                     obscureText: true,
@@ -84,7 +85,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) return 'Campo requerido';
-                      if (!Validators.password(value)) return 'Contraseña inválida';
+                      if (value.length < 6) return 'La contraseña debe tener al menos 6 caracteres';
                       return null;
                     },
                   ),
